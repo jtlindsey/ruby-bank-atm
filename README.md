@@ -2,11 +2,11 @@
 This is the code part of a Automatic Teller Machine term project at DSC. Written in ruby.
 
 ### Getting Started
-Ruby is already installed on OSX and Linux. To run the program, do the following:  
+Ruby is already installed on many OSX and Linux systems. If not, you can install it on Ubuntu systems by running: ```sudo apt-get install ruby-full``` or for other systems check out [Installing Ruby](https://www.ruby-lang.org/en/documentation/installation/ "Installing Ruby").  
+To run the program, do the following:  
 
 1. Download the zip file and unzip.  
-2. Open a terminal in the project folder  
-3. Type
+2. Open a terminal in the project folder and type the following:
 ```
 ruby start.rb
 ```  
