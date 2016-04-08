@@ -21,13 +21,14 @@ class User
     }
   end
 
-  def self.newCheckingTransaction(userId, accountNum, transactionType, amount)
+  def self.newCheckingTransaction(userId, accountNum, transactionType, amount, comment="")
     {
       userId: userId,
       accountNum: accountNum,
       date: DateTime.now,
       transactionType: transactionType,
-      amount: amount
+      amount: amount,
+      comment: comment
     }
   end
 
