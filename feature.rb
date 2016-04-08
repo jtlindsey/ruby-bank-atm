@@ -35,13 +35,10 @@ class Feature
   def self.loggedIn(customer)
     Menu.greeting(customer[:firstName], customer[:lastName])
     Menu.instructions
-    Menu.new.system(customer)
+    Menu.new.control_loop(customer)
   end
 
-  def self.listAccounts(userId)
-  end
-
-  def newTransaction
+  def newTransaction(customer)
     transacton = {
     accountnum: 0,
     transactionid: 0,
@@ -51,28 +48,28 @@ class Feature
     }
   end
 
-  def deposit
+  def deposit(customer)
   end
 
-  def withdrawalCash
+  def withdrawalCash(customer)
   #only on checking or savings
   #max $500 withdrawal per account per day
   end
 
-  def withdrawalCashAdvance
+  def withdrawalCashAdvance(customer)
   #credit card only
   #must be within credit avalible
   end
 
-  def payment
+  def payment(customer, fromAcc, toAcc)
   #to mortgage,car,boat and other loan
   end
 
-  def transfer
+  def transfer(customer, fromAcc, toAcc)
   #between any two accounts
   end
 
-  def balance
+  def balance(customer)
   end
 
 # change all ids on transactions to indexed value incremented on unique identifier

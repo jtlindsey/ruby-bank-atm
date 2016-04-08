@@ -4,6 +4,10 @@ require_relative 'feature'
 require_relative 'seed'
 
 class Menu
+  @@ljustNum = 40
+  @@rjustNum = 3
+  @@border = 47  
+
   def self.appname
     "DSC Bank ATM"
   end
@@ -16,34 +20,47 @@ class Menu
     Feature.authenticationCard(customers, atmCardId)
   end
 
+  def self.mainMenuChoices
+    [
+      "Instructions",
+      "Print Balance",
+      "Print Transactions",
+      "Transfer Funds",
+      "Deposit",
+      "Cash Withdrawal",
+      "Cash Advance",
+      "Make Payment"
+    ]
+  end
+
+  def self.transactionChoices
+    [
+      "Deposit",
+      "Payment",
+      "Transfer Funds",
+      "Cash Withdrawal",
+      "Cash Advance"
+    ]
+  end
+
   def self.instructions
     x=0
     puts 'Please select from the following:'
-    puts '-' * 40
-    puts 'Description'.ljust(30)              + 'Command'.rjust(10)
-    puts 'Instructions'.ljust(30,'.')         + "#{x+=1}".rjust(10)
-    puts 'Print Balance'.ljust(30,'.')        + "#{x+=1}".rjust(10)
-    puts 'Print Transactions'.ljust(30,'.')   + "#{x+=1}".rjust(10)
-    puts 'Transfer Funds'.ljust(30,'.')       + "#{x+=1}".rjust(10)
-    puts 'Deposit'.ljust(30,'.')              + "#{x+=1}".rjust(10)
-    puts 'Cash Withdrawal'.ljust(30,'.')      + "#{x+=1}".rjust(10)
-    puts 'Cash Advance'.ljust(30,'.')         + "#{x+=1}".rjust(10)
-    puts 'Make Payment'.ljust(30,'.')         + "#{x+=1}".rjust(10)
-    puts 'Exit'.ljust(30,'.')                 + 'x'.rjust(10)
-    puts '-' * 40    
-  end
-
-  def system(customer)
-    # puts 'Enter transaction command or 1 to see instructions.'
-    control_loop
+    puts '-' * @@border
+    puts 'Description'.ljust(@@ljustNum)  + 'Command'.rjust(@@rjustNum)
+    Menu.mainMenuChoices.each {|menuList|
+      puts menuList.ljust(@@ljustNum,'.') + "#{x+=1}".rjust(@@rjustNum)
+    }
+    puts 'Exit'.ljust(@@ljustNum,'.')        + 'x'.rjust(@@rjustNum)
+    puts '-' * @@border
   end
 
   def get_acc_info
-    print 'Enter Description: '; @description = "gets.chomp"
+    print 'Enter Description: '; @description = gets.chomp
     print 'Enter Amount: '     ; @amount = gets.chomp.to_f
   end
 
-  def control_loop
+  def control_loop(customer)
     user_choice = ''
     loop do user_choice != 'x'
       i = 0
@@ -53,7 +70,7 @@ class Menu
       case user_choice
       when "#{i+=1}".to_s then Menu.instructions
       when "#{i+=1}".to_s #print balance
-        puts "choose account by numbered menu and get balance info"
+        Menu.printBalance(customer)
       when "#{i+=1}".to_s #print transactions
         puts "choose account by numbered menu and get transactions info"
       when "#{i+=1}".to_s #update transfer funds
@@ -76,6 +93,26 @@ class Menu
     end      
   end
 
+  def self.printBalance(customer)
+    puts 'Choose Account:'.ljust(@@ljustNum,'.')        + 'Choice'.rjust(@@rjustNum)
+    puts '-' * @@border
+    User.getUserAccounts(customer)
+    puts '-' * @@border
+    account = User.getUserAccount(customer)
+    puts "#{account[:accountType]}-#{account[:accountNum]}"
+    puts "Your Balance is: #{User.getUserAccountBalance(account)}"
+  end
+
+  def self.listUserAccounts(item1, item2, choice)
+    puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
+  end
+
+  def self.listAccInfo()
+  #   puts '-' * 40
+  #   puts "#{Name}'s Bank Accounts".center(42)
+  #   puts '-' * 40
+  end
+
   def self.greeting(first_name, last_name)
     puts "\nHello #{first_name} #{last_name}"
   end
@@ -84,10 +121,3 @@ class Menu
     puts "Thank you for using #{appname}. \nGoodbye!\n\n"
   end
 end
-
-
-  # def info
-  #   puts '-' * 40
-  #   puts "#{Name}'s Bank Accounts".center(42)
-  #   puts '-' * 40
-  # end

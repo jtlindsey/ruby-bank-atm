@@ -31,6 +31,12 @@ class Seed
     acustomer[:accounts].push(User.newAccount(newcustomerid, 60000 + newcustomerid,"Boat Loan"))
     acustomer[:accounts].push(User.newAccount(newcustomerid, 70000 + newcustomerid,"Credit Card"))
 
+    # Make some transactions for that customers accounts
+    # newCheckingTransaction(userId, accountNum, transactionType)
+    account = acustomer[:accounts].find {|account| account[:accountNum] == (10000 + newcustomerid)}
+    account[:transactions].push(User.newCheckingTransaction(newcustomerid, 10000 + newcustomerid, "Deposit", 900))
+
+
     newcustomerid = 2
     acustomer = User.findUser(customers, newcustomerid)
     acustomer[:accounts].push(User.newAccount(newcustomerid, 20000 + newcustomerid,"Savings"))
@@ -46,8 +52,15 @@ class Seed
     acustomer[:accounts].push(User.newAccount(newcustomerid, 50000 + newcustomerid,"Car Loan"))
     acustomer[:accounts].push(User.newAccount(newcustomerid, 51000 + newcustomerid,"Car Loan"))
     acustomer[:accounts].push(User.newAccount(newcustomerid, 70000 + newcustomerid,"Credit Card"))
-    # puts acustomer[:accounts]
+
+    # Make some transactions for that customers accounts
+    # newCheckingTransaction(userId, accountNum, transactionType)
+    account = acustomer[:accounts].find {|account| account[:accountNum] == (10000 + newcustomerid)}
+    account[:transactions].push(User.newCheckingTransaction(newcustomerid, 10000 + newcustomerid, "Deposit", 900))
+    account[:transactions].push(User.newCheckingTransaction(newcustomerid, 10000 + newcustomerid, "Deposit", 1250))
 
     customers
   end
 end
+
+# Seed.createCustomers
