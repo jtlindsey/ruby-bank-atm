@@ -25,7 +25,7 @@ class User
     {
       userId: userId,
       accountNum: accountNum,
-      date: DateTime.now,
+      date: DateTime.now.to_s,
       transactionType: transactionType,
       amount: amount,
       comment: comment
