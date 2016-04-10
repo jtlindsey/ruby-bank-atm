@@ -52,10 +52,8 @@ class Feature
     limit = 10
     todaysTransactions = 0
     account[:transactions].each {|transaction|
-      puts transaction[:date]
       todaysTransactions +=1 if transaction[:date] == Date.today.to_s
     }
-    puts todaysTransactions
     todaysTransactions >= limit ? true : false
   end
 
