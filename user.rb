@@ -44,6 +44,18 @@ class User
     }
   end
 
+  def self.defaultAccounts
+    [
+      "Checking", 
+      "Savings", 
+      "Loan", 
+      "Mortgage", 
+      "Car Loan", 
+      "Boat Loan", 
+      "Credit Card"
+    ]
+  end
+
   def self.findUserByCard(customers, atmCardId)
     lookup = customers.find {|customer| customer[:atmCardId] == atmCardId}
     (lookup != nil) ? lookup : false
@@ -54,11 +66,16 @@ class User
     customers.find {|customer| customer[:userId] == userId}
   end
 
-  def self.getUserAccounts(customer) #plural
+  def self.getUserAccountsByType(customer, accountTypes) #plural
     choice = 0
+    User.defaultAccounts 
+    accountTypes = User.defaultAccounts if accountTypes.empty?
+
     customer[:accounts].each {|hash| 
       choice += 1
-      Menu.listUserAccounts(hash[:accountType], hash[:accountNum], choice)
+      if accountTypes.include?(hash[:accountType])
+        Menu.listUserAccounts(hash[:accountType], hash[:accountNum], choice)
+      end
     }
   end
 

@@ -77,16 +77,12 @@ class Menu
         Menu.transferFunds(customer)
       when "#{i+=1}".to_s #deposit
         Menu.deposit(customer)
-
-
-
-
-
-
-
-
       when "#{i+=1}".to_s #cash withdrawal
-        puts "choose account by numbered menu and get withdrawal amount"
+        Menu.withdrawalCash(customer)
+
+
+
+
       when "#{i+=1}".to_s #cash advance
         puts "choose account by numbered menu and get withdrawal-advance amount"
       when "#{i+=1}".to_s #payment
@@ -105,22 +101,30 @@ class Menu
     puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
   end
 
-  def self.chooseAccount(customer)
+  # def self.chooseAccount(customer, accountTypes =[])
+  #   puts 'Choose Account:'.ljust(@@ljustNum,'.')        + 'Choice'.rjust(@@rjustNum)
+  #   puts '-' * @@border
+  #   User.getUserAccountsByType(customer, accountTypes) #plural
+  #   puts '-' * @@border
+  #   User.getUserAccountsByType(customer, accountTypes) #single
+  # end
+
+  def self.chooseAccountbyType(customer, accountTypes = [])
     puts 'Choose Account:'.ljust(@@ljustNum,'.')        + 'Choice'.rjust(@@rjustNum)
     puts '-' * @@border
-    User.getUserAccounts(customer) #plural
+    User.getUserAccountsByType(customer, accountTypes) #plural
     puts '-' * @@border
     User.getUserAccount(customer) #single
   end
 
   def self.printBalance(customer)
-    account = Menu.chooseAccount(customer)
+    account = Menu.chooseAccountbyType(customer)
     puts "#{account[:accountType]}-#{account[:accountNum]}"
     puts "Your Balance is: #{User.getUserAccountBalance(account)}"
   end
 
   def self.printTransactions(customer)
-    account = Menu.chooseAccount(customer)
+    account = Menu.chooseAccountbyType(customer)
     puts "Transactions for: #{account[:accountType]}-#{account[:accountNum]}"
     transactions = User.getUserAccountTransactions(account)
     padding = 15
@@ -135,9 +139,10 @@ class Menu
   def self.transferFunds(customer)
     #Note: Prof requested to be able to transfer funds between 'ANY' two accounts
     puts "\nSelect account to transfer funds from: "
-    fromAccount = Menu.chooseAccount(customer)
+    fromAccount = Menu.chooseAccountbyType(customer)
     puts "\nSelect account to transfer funds to: "
-    toAccount = Menu.chooseAccount(customer)
+    toAccount = Menu.chooseAccountbyType(customer)
+    # dailyTransactions Limit
     if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
       puts "You have reached your daily transaction limit."
     else
@@ -148,13 +153,30 @@ class Menu
   end
 
   def self.deposit(customer)
-    account = Menu.chooseAccount(customer)
+    account = Menu.chooseAccountbyType(customer)
+    # dailyTransactions Limit
     if Feature.dailyTransactionLimit(account) == true
       puts "You have reached your daily transaction limit."
     else
       print "How much? "; amount = gets.chomp.to_f
       Feature.deposit(account, amount)
       puts "Deposited $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
+    end
+  end
+
+  def self.withdrawalCash(customer)
+    #only on checking or savings
+    account = Menu.chooseAccountbyType(customer, ["Checking", "Savings"])
+    #max $500 withdrawal per account per day
+
+
+    # dailyTransactions Limit
+    if Feature.dailyTransactionLimit(account) == true
+      puts "You have reached your daily transaction limit."
+    else
+      print "How much? "; amount = gets.chomp.to_f
+      Feature.withdrawalCash(account, amount)
+      puts "Withdrew $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
     end
   end
 

@@ -67,17 +67,24 @@ class Feature
       )
   end
 
-  def self.withdrawalCash(account)
+  def self.withdrawalCash(account, amount)
   #only on checking or savings
   #max $500 withdrawal per account per day
+    account[:transactions].push(
+      User.newTransaction(
+        account[:userId], 
+        account[:accountNum], 
+        "Withdrawal Cash", 
+        (-1 * amount))
+      )
   end
 
-  def self.withdrawalCashAdvance(account)
+  def self.withdrawalCashAdvance(account, amount)
   #credit card only
   #must be within credit avalible
   end
 
-  def self.payment(account, fromAcc, toAcc)
+  def self.payment(account, fromAcc, toAcc, amount)
   #to mortgage,car,boat and other loan
   end
 
