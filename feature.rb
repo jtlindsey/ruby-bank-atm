@@ -60,11 +60,10 @@ class Feature
   def self.deposit(account, amount)
     account[:transactions].push(
       User.newTransaction(
-        toAccount[:userId], 
-        toAccount[:accountNum], 
+        account[:userId], 
+        account[:accountNum], 
         "Deposit", 
-        amount, 
-        "From: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]}")
+        amount)
       )
   end
 
