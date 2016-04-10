@@ -59,6 +59,12 @@ class Seed
     account[:transactions].push(User.newTransaction(newcustomerid, 10000 + newcustomerid, "Deposit", 900, ""))
     account[:transactions].push(User.newTransaction(newcustomerid, 10000 + newcustomerid, "Deposit", 1250, ""))
 
+    account = acustomer[:accounts].find {|account| account[:accountNum] == (40000 + newcustomerid)}
+    account[:transactions].push(User.newTransaction(newcustomerid, 40000 + newcustomerid, "Charge", 75000, "oldHouse"))
+
+    account = acustomer[:accounts].find {|account| account[:accountNum] == (50000 + newcustomerid)}    
+    account[:transactions].push(User.newTransaction(newcustomerid, 50000 + newcustomerid, "Charge", 12000, "newCar"))
+    
     customers
   end
 end
