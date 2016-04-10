@@ -21,6 +21,17 @@ class User
     }
   end
 
+  def self.newTransferTransaction(userId, accountNum, transactionType, amount, comment="")
+    {
+      userId: userId,
+      accountNum: accountNum,
+      date: Date.today.to_s,
+      transactionType: transactionType,
+      amount: amount,
+      comment: comment
+    }
+  end
+
   def self.newCheckingTransaction(userId, accountNum, transactionType, amount, comment="")
     {
       userId: userId,
@@ -64,6 +75,3 @@ class User
   end
 
 end
-
-# finding customer by atmCardId
-# customers.select {|customer| customer[:atmCardId] == "0df20751-e24f-481b-9b75-8c26efee3198" }

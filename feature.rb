@@ -39,38 +39,67 @@ class Feature
   end
 
   def newTransaction(customer)
+    #max trans per account per day 10 handled at menu request
     transacton = {
     accountnum: 0,
     transactionid: 0,
     transactiontype: "deposit withddrawal payment transfer",
     tranactiondate: datetime
-    #max trans per account per day 10
     }
   end
 
-  def deposit(customer)
+  def self.dailyTransactionLimit(account)
+    limit = 10
+    numberOfTransactions = account[:transactions].length
+    numberOfTransactions >= limit ? true : false
   end
 
-  def withdrawalCash(customer)
+  def self.deposit(account)
+  end
+
+  def self.withdrawalCash(account)
   #only on checking or savings
   #max $500 withdrawal per account per day
   end
 
-  def withdrawalCashAdvance(customer)
+  def self.withdrawalCashAdvance(account)
   #credit card only
   #must be within credit avalible
   end
 
-  def payment(customer, fromAcc, toAcc)
+  def self.payment(account, fromAcc, toAcc)
   #to mortgage,car,boat and other loan
   end
 
-  def transfer(customer, fromAcc, toAcc)
-  #between any two accounts
+  def self.transfer(fromAccount, toAccount, amount)
+    #Note: Prof requested to be able to transfer funds between 'ANY' two accounts
+    Feature.withdrawalTransfer(fromAccount, amount, toAccount)
+    Feature.depositTransfer(toAccount, amount, fromAccount)
+    # user.withdrawal(account, amount)
   end
 
-  def balance(customer)
+  def self.depositTransfer(toAccount, amount, fromAccount)
+    toAccount[:transactions].push(
+      User.newTransferTransaction(
+        toAccount[:userId], 
+        toAccount[:accountNum], 
+        "Deposit", 
+        amount, 
+        "#{fromAccount[:accountType]}-#{fromAccount[:accountNum]}")
+      )
+  end
+
+  def self.withdrawalTransfer(fromAccount, amount, toAccount)
+    fromAccount[:transactions].push(
+      User.newTransferTransaction(
+        fromAccount[:userId], 
+        fromAccount[:accountNum], 
+        "Withdrawal", 
+        (-1 * amount), 
+        "#{toAccount[:accountType]}-#{toAccount[:accountNum]}")
+      )
   end
 
 # change all ids on transactions to indexed value incremented on unique identifier
+# Time.now.to_i
 end

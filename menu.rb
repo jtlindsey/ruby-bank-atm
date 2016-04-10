@@ -131,7 +131,18 @@ class Menu
   end
 
   def self.transferFunds(customer)
-    puts "choose from acc and to accc by numbered menu and get amount"
+    #Note: Prof requested to be able to transfer funds between 'ANY' two accounts
+    puts "\nSelect account to transfer funds from: "
+    fromAccount = Menu.chooseAccount(customer)
+    puts "\nSelect account to transfer funds to: "
+    toAccount = Menu.chooseAccount(customer)
+    if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
+      puts "You have reached your daily transaction limit."
+    else
+      print "How much? "; amount = gets.chomp.to_f
+      Feature.transfer(fromAccount, toAccount, amount)
+      puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+    end
   end
 
   def self.greeting(first_name, last_name)
