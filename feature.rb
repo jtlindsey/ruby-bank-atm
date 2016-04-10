@@ -50,8 +50,13 @@ class Feature
 
   def self.dailyTransactionLimit(account)
     limit = 10
-    numberOfTransactions = account[:transactions].length
-    numberOfTransactions >= limit ? true : false
+    todaysTransactions = 0
+    account[:transactions].each {|transaction|
+      puts transaction[:date]
+      todaysTransactions +=1 if transaction[:date] == Date.today.to_s
+    }
+    puts todaysTransactions
+    todaysTransactions >= limit ? true : false
   end
 
   def self.deposit(account)
