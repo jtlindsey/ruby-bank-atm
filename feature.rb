@@ -1,9 +1,11 @@
 require_relative 'user'
 
 class Feature
-  def self.authenticationCard(customers, atmCardId)
-    userWithCard = User.findUserByCard(customers, atmCardId)
+  def self.authenticationCard(customers)
+    # puts "Please enter your ATM card."; atmCardId = gets.chomp
+    puts "Please enter your ATM card:"; atmCardId = "80e711df-8c8d-4d1b-871e-7e1528675d11"
 
+    userWithCard = User.findUserByCard(customers, atmCardId)
     case userWithCard
     when false then puts "That card is not accepted at this ATM.\nGoodbye!"
     else

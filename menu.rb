@@ -14,10 +14,8 @@ class Menu
 
   def self.welcome
     puts "\nWelcome to #{self.appname}."
-    # puts "Please enter your ATM card."; atmCardId = gets.chomp
-    puts "Please enter your ATM card:"; atmCardId = "80e711df-8c8d-4d1b-871e-7e1528675d11"
     customers = Seed.createCustomers
-    Feature.authenticationCard(customers, atmCardId)
+    Feature.authenticationCard(customers)
   end
 
   def self.mainMenuChoices
