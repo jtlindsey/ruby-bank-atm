@@ -121,12 +121,12 @@ class Menu
     account = Menu.chooseAccount(customer)
     puts "Transactions for: #{account[:accountType]}-#{account[:accountNum]}"
     transactions = User.getUserAccountTransactions(account)
-    padding = 8
+    padding = 15
     transactions.each {|transaction| 
       puts "#{transaction[:date]}".ljust(padding) + 
             " #{transaction[:transactionType]}".ljust(padding) + 
             " #{transaction[:amount]}".ljust(padding) +
-            " #{transaction[:comment]}"
+            " #{transaction[:comment]}".rjust(padding)
     }
   end
 

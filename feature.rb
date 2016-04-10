@@ -88,7 +88,7 @@ class Feature
         toAccount[:accountNum], 
         "Deposit", 
         amount, 
-        "#{fromAccount[:accountType]}-#{fromAccount[:accountNum]}")
+        "From: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]}")
       )
   end
 
@@ -99,7 +99,7 @@ class Feature
         fromAccount[:accountNum], 
         "Withdrawal", 
         (-1 * amount), 
-        "#{toAccount[:accountType]}-#{toAccount[:accountNum]}")
+        "To: #{toAccount[:accountType]}-#{toAccount[:accountNum]}")
       )
   end
 
