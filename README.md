@@ -37,3 +37,8 @@ Pin:
 Some prompts may be commented out and replaced with hard code while in progress.  
 Entering in the wrong ATM Card key once will exit program.  
 Entering in the wrong Pin 3 times will exit program.  
+
+Error handling for many features have not been requested or added including:  
+
+- Checking available funds when making payment from account  
+- Unacceptable key entry not relevant to presented menu list item
