@@ -42,7 +42,7 @@ class User
     customers.find {|customer| customer[:userId] == userId}
   end
 
-  def self.getUserAccounts(customer)
+  def self.getUserAccounts(customer) #plural
     choice = 0
     customer[:accounts].each {|hash| 
       choice += 1
@@ -50,18 +50,17 @@ class User
     }
   end
 
-  def self.getUserAccount(customer)
-    # get single account info
+  def self.getUserAccount(customer) #single
     print 'Which account? '; accNumber = gets.chomp.to_i
     customer[:accounts][accNumber-1]
   end
 
   def self.getUserAccountBalance(customerAccount)
-    # balance = customerAccount[:transactions].each {|transaction| puts transaction[:amount] }
     customerAccount[:transactions].inject(0) { |balance, transaction|  balance += transaction[:amount]}    
   end
 
-  def self.findUserAccountTransaction
+  def self.getUserAccountTransactions(customerAccount)
+    customerAccount[:transactions]
   end
 
 end

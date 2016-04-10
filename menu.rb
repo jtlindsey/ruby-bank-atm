@@ -15,7 +15,7 @@ class Menu
   def self.welcome
     puts "\nWelcome to #{self.appname}."
     # puts "Please enter your ATM card."; atmCardId = gets.chomp
-    puts "Please enter your ATM card."; atmCardId = "80e711df-8c8d-4d1b-871e-7e1528675d11"
+    puts "Please enter your ATM card:"; atmCardId = "80e711df-8c8d-4d1b-871e-7e1528675d11"
     customers = Seed.createCustomers
     Feature.authenticationCard(customers, atmCardId)
   end
@@ -72,7 +72,12 @@ class Menu
       when "#{i+=1}".to_s #print balance
         Menu.printBalance(customer)
       when "#{i+=1}".to_s #print transactions
-        puts "choose account by numbered menu and get transactions info"
+        Menu.printTransactions(customer)
+
+
+
+
+
       when "#{i+=1}".to_s #update transfer funds
         puts "choose from acc and to accc by numbered menu and get amount"
       when "#{i+=1}".to_s #deposit
@@ -93,24 +98,35 @@ class Menu
     end      
   end
 
-  def self.printBalance(customer)
+  def self.chooseAccount(customer)
     puts 'Choose Account:'.ljust(@@ljustNum,'.')        + 'Choice'.rjust(@@rjustNum)
     puts '-' * @@border
-    User.getUserAccounts(customer)
+    User.getUserAccounts(customer) #plural
     puts '-' * @@border
-    account = User.getUserAccount(customer)
+    User.getUserAccount(customer) #single
+  end
+
+  def self.printBalance(customer)
+    account = Menu.chooseAccount(customer)
     puts "#{account[:accountType]}-#{account[:accountNum]}"
     puts "Your Balance is: #{User.getUserAccountBalance(account)}"
   end
 
-  def self.listUserAccounts(item1, item2, choice)
-    puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
+  def self.printTransactions(customer)
+    account = Menu.chooseAccount(customer)
+    puts "Transactions for: #{account[:accountType]}-#{account[:accountNum]}"
+    transactions = User.getUserAccountTransactions(account)
+    padding = 8
+    transactions.each {|transaction| 
+    puts "#{transaction[:date]}".ljust(padding) + 
+          " #{transaction[:transactionType]}".ljust(padding) + 
+          " #{transaction[:amount]}".ljust(padding) +
+          " #{transaction[:comment]}"
+    }
   end
 
-  def self.listAccInfo()
-  #   puts '-' * 40
-  #   puts "#{Name}'s Bank Accounts".center(42)
-  #   puts '-' * 40
+  def self.listUserAccounts(item1, item2, choice)
+    puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
   end
 
   def self.greeting(first_name, last_name)
