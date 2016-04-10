@@ -57,7 +57,15 @@ class Feature
     todaysTransactions >= limit ? true : false
   end
 
-  def self.deposit(account)
+  def self.deposit(account, amount)
+    account[:transactions].push(
+      User.newTransaction(
+        toAccount[:userId], 
+        toAccount[:accountNum], 
+        "Deposit", 
+        amount, 
+        "From: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]}")
+      )
   end
 
   def self.withdrawalCash(account)

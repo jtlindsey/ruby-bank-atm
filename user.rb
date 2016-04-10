@@ -12,12 +12,13 @@ class User
     }
   end
 
-  def self.newAccount(userId, accountNum, accountType)
+  def self.newAccount(userId, accountNum, accountType, creditLimit = 0)
     {
       userId: userId,
       accountNum: accountNum,
       accountType: accountType,
-      transactions: []
+      transactions: [],
+      creditLimit: creditLimit
     }
   end
 
@@ -32,7 +33,7 @@ class User
     }
   end
 
-  def self.newCheckingTransaction(userId, accountNum, transactionType, amount, comment="")
+  def self.newTransaction(userId, accountNum, transactionType, amount, comment="")
     {
       userId: userId,
       accountNum: accountNum,

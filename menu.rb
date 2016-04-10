@@ -75,14 +75,16 @@ class Menu
         Menu.printTransactions(customer)
       when "#{i+=1}".to_s #transfer funds
         Menu.transferFunds(customer)
-
-
-
-
-
-
       when "#{i+=1}".to_s #deposit
-        puts "choose account by numbered menu and get deposit amount"
+        Menu.deposit(customer)
+
+
+
+
+
+
+
+
       when "#{i+=1}".to_s #cash withdrawal
         puts "choose account by numbered menu and get withdrawal amount"
       when "#{i+=1}".to_s #cash advance
@@ -142,6 +144,17 @@ class Menu
       print "How much? "; amount = gets.chomp.to_f
       Feature.transfer(fromAccount, toAccount, amount)
       puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+    end
+  end
+
+  def self.deposit(customer)
+    account = Menu.chooseAccount(customer)
+    if Feature.dailyTransactionLimit(account) == true
+      puts "You have reached your daily transaction limit."
+    else
+      print "How much? "; amount = gets.chomp.to_f
+      Feature.deposit(account, amount)
+      puts "Deposited $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
     end
   end
 
