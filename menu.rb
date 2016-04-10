@@ -73,13 +73,14 @@ class Menu
         Menu.printBalance(customer)
       when "#{i+=1}".to_s #print transactions
         Menu.printTransactions(customer)
+      when "#{i+=1}".to_s #transfer funds
+        Menu.transferFunds(customer)
 
 
 
 
 
-      when "#{i+=1}".to_s #update transfer funds
-        puts "choose from acc and to accc by numbered menu and get amount"
+
       when "#{i+=1}".to_s #deposit
         puts "choose account by numbered menu and get deposit amount"
       when "#{i+=1}".to_s #cash withdrawal
@@ -96,6 +97,10 @@ class Menu
 
       break if user_choice == 'x'
     end      
+  end
+
+  def self.listUserAccounts(item1, item2, choice)
+    puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
   end
 
   def self.chooseAccount(customer)
@@ -118,15 +123,15 @@ class Menu
     transactions = User.getUserAccountTransactions(account)
     padding = 8
     transactions.each {|transaction| 
-    puts "#{transaction[:date]}".ljust(padding) + 
-          " #{transaction[:transactionType]}".ljust(padding) + 
-          " #{transaction[:amount]}".ljust(padding) +
-          " #{transaction[:comment]}"
+      puts "#{transaction[:date]}".ljust(padding) + 
+            " #{transaction[:transactionType]}".ljust(padding) + 
+            " #{transaction[:amount]}".ljust(padding) +
+            " #{transaction[:comment]}"
     }
   end
 
-  def self.listUserAccounts(item1, item2, choice)
-    puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
+  def self.transferFunds(customer)
+    puts "choose from acc and to accc by numbered menu and get amount"
   end
 
   def self.greeting(first_name, last_name)
