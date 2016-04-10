@@ -48,13 +48,37 @@ class Feature
     }
   end
 
+  def self.dailyTransactionLimitAmount
+    10
+  end
+
+  def self.dailyWithdrawalLimitAmount
+    500
+  end
+
   def self.dailyTransactionLimit(account)
-    limit = 10
+    limit = Feature.dailyTransactionLimitAmount
     todaysTransactions = 0
     account[:transactions].each {|transaction|
       todaysTransactions +=1 if transaction[:date] == Date.today.to_s
     }
     todaysTransactions >= limit ? true : false
+  end
+
+  def self.dailyWithdrawalLimit(account)
+    limit = Feature.dailyWithdrawalLimitAmount
+    todaysTotal = Feature.totalWithdrawalsToday(account)
+    todaysTotal >= limit ? true : false
+  end
+
+  def self.totalWithdrawalsToday(account)
+    todaysTotal = 0
+    account[:transactions].each {|transaction|
+      if transaction[:date] == Date.today.to_s && transaction[:amount] < 0
+        todaysTotal += (transaction[:amount] * -1) 
+      end
+    }
+    todaysTotal
   end
 
   def self.deposit(account, amount)

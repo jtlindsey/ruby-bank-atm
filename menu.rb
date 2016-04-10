@@ -168,15 +168,19 @@ class Menu
     #only on checking or savings
     account = Menu.chooseAccountbyType(customer, ["Checking", "Savings"])
     #max $500 withdrawal per account per day
-
-
     # dailyTransactions Limit
     if Feature.dailyTransactionLimit(account) == true
       puts "You have reached your daily transaction limit."
+    elsif Feature.dailyWithdrawalLimit(account) == true
+      puts "You have reached your daily cash withdrawal limit."
     else
       print "How much? "; amount = gets.chomp.to_f
-      Feature.withdrawalCash(account, amount)
-      puts "Withdrew $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
+      if (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
+        puts "This transaction will take take you above your daily cash withdrawal limit."
+      else
+        Feature.withdrawalCash(account, amount)
+        puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+      end
     end
   end
 
