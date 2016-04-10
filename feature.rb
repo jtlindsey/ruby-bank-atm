@@ -113,15 +113,15 @@ class Feature
       )
   end
 
-  def self.payment(account, fromAcc, toAcc, amount)
-  #to mortgage,car,boat and other loan
+  def self.payment(fromAccount, toAccount, amount)
+    Feature.withdrawalTransfer(fromAccount, amount, toAccount)
+    Feature.depositTransfer(toAccount, (-1 * amount), fromAccount)
   end
 
   def self.transfer(fromAccount, toAccount, amount)
     #Note: Prof requested to be able to transfer funds between 'ANY' two accounts
     Feature.withdrawalTransfer(fromAccount, amount, toAccount)
     Feature.depositTransfer(toAccount, amount, fromAccount)
-    # user.withdrawal(account, amount)
   end
 
   def self.depositTransfer(toAccount, amount, fromAccount)

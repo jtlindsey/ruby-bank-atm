@@ -83,14 +83,6 @@ class Menu
         Menu.withdrawalCashAdvance(customer)
       when "#{i+=1}".to_s #payment
         Menu.payment(customer)
-
-
-
-
-
-
-
-
       when 'x' then Menu.goodbye
       else
         puts 'Invalid Choice.'
@@ -202,6 +194,20 @@ class Menu
   end
 
   def self.payment(customer)
+    #only from checking or savings
+    puts "\nSelect account to transfer funds from: "
+    fromAccount = Menu.chooseAccountbyType(customer, ["Checking", "Savings"])
+    puts "\nSelect account to transfer funds to: "
+    #only to Mortgage and Car Loan
+    toAccount = Menu.chooseAccountbyType(customer, ["Mortgage", "Car Loan"])
+    # dailyTransactions Limit
+    if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
+      puts "Declined: You have reached your daily transaction limit."
+    else
+      print "How much? "; amount = gets.chomp.to_f
+      Feature.payment(fromAccount, toAccount, amount)
+      puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+    end
   end
 
   def self.greeting(first_name, last_name)
