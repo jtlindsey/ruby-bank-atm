@@ -104,8 +104,13 @@ class Feature
   end
 
   def self.withdrawalCashAdvance(account, amount)
-  #credit card only
-  #must be within credit avalible
+    account[:transactions].push(
+      User.newTransaction(
+        account[:userId], 
+        account[:accountNum], 
+        "Withdrawal Cash Advance", 
+        amount)
+      )
   end
 
   def self.payment(account, fromAcc, toAcc, amount)
