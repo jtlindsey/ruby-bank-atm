@@ -51,7 +51,7 @@ class Seed
     acustomer[:accounts].push(User.newAccount(newcustomerid, 40000 + newcustomerid,"Mortgage"))
     acustomer[:accounts].push(User.newAccount(newcustomerid, 50000 + newcustomerid,"Car Loan"))
     acustomer[:accounts].push(User.newAccount(newcustomerid, 51000 + newcustomerid,"Car Loan"))
-    acustomer[:accounts].push(User.newAccount(newcustomerid, 70000 + newcustomerid,"Credit Card"))
+    acustomer[:accounts].push(User.newAccount(newcustomerid, 70000 + newcustomerid,"Credit Card", 1000))
 
     # Make some transactions for that customers accounts
     # newCheckingTransaction(userId, accountNum, transactionType, amount, comment)
