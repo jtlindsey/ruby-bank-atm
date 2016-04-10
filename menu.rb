@@ -81,13 +81,16 @@ class Menu
         Menu.withdrawalCash(customer)
       when "#{i+=1}".to_s #cash advance
         Menu.withdrawalCashAdvance(customer)
-
-
-
-
-
       when "#{i+=1}".to_s #payment
-        puts "choose account by numbered menu and get payment amount"
+        Menu.payment(customer)
+
+
+
+
+
+
+
+
       when 'x' then Menu.goodbye
       else
         puts 'Invalid Choice.'
@@ -196,6 +199,9 @@ class Menu
         puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
       end
     end
+  end
+
+  def self.payment(customer)
   end
 
   def self.greeting(first_name, last_name)
