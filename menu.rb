@@ -178,12 +178,12 @@ class Menu
     # dailyTransactions Limit
     if Feature.dailyTransactionLimit(account) == true
       puts "Declined: You have reached your daily transaction limit."
-    elsif Feature.dailyWithdrawalLimit(account) == true
-      puts "Declined: You have reached your daily cash withdrawal limit."
     else
       print "How much? "; amount = gets.chomp.to_f
       if (amount + User.getUserAccountBalance(account)) > account[:creditLimit]
         puts "Declined: This transaction will take you over your credit limit."
+      elsif (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
+        puts "Declined: You have reached your daily cash withdrawal limit."
       else
         Feature.withdrawalCashAdvance(account, amount)
         puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "

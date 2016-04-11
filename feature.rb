@@ -75,11 +75,21 @@ class Feature
 
   def self.totalWithdrawalsToday(account)
     todaysTotal = 0
-    account[:transactions].each {|transaction|
-      if transaction[:date] == Date.today.to_s && transaction[:amount] < 0
-        todaysTotal += (transaction[:amount] * -1) 
-      end
-    }
+    if User.liabilityAccounts.include?(account[:accountType])
+      #use if withdrawal limit applies to all accounts (including liabilities)
+      account[:transactions].each {|transaction|
+        if transaction[:date] == Date.today.to_s && transaction[:amount] > 0
+          todaysTotal += (transaction[:amount]) 
+        end
+      }
+    else
+      account[:transactions].each {|transaction|
+        if transaction[:date] == Date.today.to_s && transaction[:amount] < 0
+          todaysTotal += (transaction[:amount] * -1) 
+        end
+      }
+    end
+    puts todaysTotal
     todaysTotal
   end
 
