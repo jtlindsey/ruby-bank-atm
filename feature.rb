@@ -117,7 +117,7 @@ class Feature
 
   def self.payment(fromAccount, toAccount, amount)
     Feature.withdrawalTransfer(fromAccount, amount, toAccount)
-    Feature.depositTransfer(toAccount, (-1 * amount), fromAccount)
+    Feature.depositTransfer(toAccount, (amount), fromAccount)
   end
 
   def self.transfer(fromAccount, toAccount, amount)
@@ -140,6 +140,8 @@ class Feature
   end
 
   def self.withdrawalTransfer(fromAccount, amount, toAccount)
+    amount = (amount * -1) if User.liabilityAccounts.include?(fromAccount[:accountType])
+
     fromAccount[:transactions].push(
       User.newTransferTransaction(
         fromAccount[:userId], 
