@@ -56,6 +56,16 @@ class User
     ]
   end
 
+  def self.liabilityAccounts
+    [
+      "Loan", 
+      "Mortgage", 
+      "Car Loan", 
+      "Boat Loan", 
+      "Credit Card"
+    ]
+  end
+
   def self.findUserByCard(customers, atmCardId)
     lookup = customers.find {|customer| customer[:atmCardId] == atmCardId}
     (lookup != nil) ? lookup : false

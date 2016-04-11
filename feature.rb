@@ -127,6 +127,8 @@ class Feature
   end
 
   def self.depositTransfer(toAccount, amount, fromAccount)
+    amount = (amount * -1) if User.liabilityAccounts.include?(toAccount[:accountType])
+
     toAccount[:transactions].push(
       User.newTransferTransaction(
         toAccount[:userId], 
