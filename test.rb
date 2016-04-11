@@ -1,0 +1,1 @@
+bar_path = File.join(File.dirname(__FILE__), "../data/mydata.txt")
