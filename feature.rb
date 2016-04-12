@@ -95,6 +95,8 @@ class Feature
   end
 
   def self.deposit(account, amount)
+    amount = (amount * -1) if User.liabilityAccounts.include?(account[:accountType])
+
     account[:transactions].push(
       User.newTransaction(
         account[:userId], 
