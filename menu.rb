@@ -14,7 +14,8 @@ class Menu
 
   def self.welcome
     puts "\nWelcome to #{self.appname}."
-    customers = Seed.createCustomers
+    # customers = Seed.createCustomers
+    customers = Feature.storedData
     Feature.authenticationCard(customers)
   end
 
@@ -81,7 +82,9 @@ class Menu
         Menu.withdrawalCashAdvance(customer)
       when "#{i+=1}".to_s #payment
         Menu.payment(customer)
-      when 'x' then Menu.goodbye
+      when 'x' #save data and exit
+        Menu.dataSave(customer)
+        Menu.goodbye
       else
         puts 'Invalid Choice.'
         Menu.instructions
@@ -210,6 +213,11 @@ class Menu
 
   def self.greeting(first_name, last_name)
     puts "\nHello #{first_name} #{last_name}"
+  end
+
+  def self.dataSave(customer)
+    Feature.getStoredDataAndSave(customer)
+    puts "Thank you for using #{appname}. \nGoodbye!\n\n"
   end
 
   def self.goodbye
