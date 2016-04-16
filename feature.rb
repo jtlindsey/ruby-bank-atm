@@ -36,7 +36,7 @@ class Feature
   end
 
   def self.loggedIn(customer)
-    Menu.greeting(customer[:firstName], customer[:lastName])
+    Menu.printGreeting(customer[:firstName], customer[:lastName])
     Menu.printInstructions
     Menu.new.printMainLoop(customer)
   end

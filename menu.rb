@@ -204,7 +204,7 @@ class Menu
     end
   end
 
-  def self.greeting(first_name, last_name)
+  def self.printGreeting(first_name, last_name)
     puts "\nHello #{first_name} #{last_name}"
   end
 
