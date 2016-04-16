@@ -37,8 +37,8 @@ class Feature
 
   def self.loggedIn(customer)
     Menu.greeting(customer[:firstName], customer[:lastName])
-    Menu.instructions
-    Menu.new.control_loop(customer)
+    Menu.printInstructions
+    Menu.new.printMainLoop(customer)
   end
 
   def newTransaction(customer)

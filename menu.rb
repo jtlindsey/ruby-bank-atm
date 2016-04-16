@@ -40,7 +40,7 @@ class Menu
     ]
   end
 
-  def self.instructions
+  def self.printInstructions
     x=0
     puts 'Please select from the following:'
     puts '-' * @@border
@@ -52,12 +52,7 @@ class Menu
     puts '-' * @@border
   end
 
-  def get_acc_info
-    print 'Enter Description: '; @description = gets.chomp
-    print 'Enter Amount: '     ; @amount = gets.chomp.to_f
-  end
-
-  def control_loop(customer)
+  def printMainLoop(customer)
     user_choice = ''
     loop do user_choice != 'x'
       i = 0
@@ -65,38 +60,38 @@ class Menu
       user_choice = gets.chomp.to_s.downcase
 
       case user_choice
-      when "#{i+=1}".to_s then Menu.instructions
+      when "#{i+=1}".to_s then Menu.printInstructions
       when "#{i+=1}".to_s #print balance
         Menu.printBalance(customer)
       when "#{i+=1}".to_s #print transactions
         Menu.printTransactions(customer)
       when "#{i+=1}".to_s #transfer funds
-        Menu.transferFunds(customer)
+        Menu.printTransferFunds(customer)
       when "#{i+=1}".to_s #deposit
-        Menu.deposit(customer)
+        Menu.printDeposit(customer)
       when "#{i+=1}".to_s #cash withdrawal
-        Menu.withdrawalCash(customer)
+        Menu.printWithdrawalCash(customer)
       when "#{i+=1}".to_s #cash advance
-        Menu.withdrawalCashAdvance(customer)
+        Menu.printWithdrawalCashAdvance(customer)
       when "#{i+=1}".to_s #payment
-        Menu.payment(customer)
+        Menu.printPayment(customer)
       when 'x' #save data and exit
-        Menu.dataSave(customer)
-        Menu.goodbye
+        Feature.getStoredDataAndSave(customer)
+        Menu.printGoodbye
       else
         puts 'Invalid Choice.'
-        Menu.instructions
+        Menu.printInstructions
       end
 
       break if user_choice == 'x'
     end      
   end
 
-  def self.listUserAccounts(item1, item2, choice)
+  def self.printUserAccounts(item1, item2, choice)
     puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
   end
 
-  def self.chooseAccountbyType(customer, accountTypes = [])
+  def self.printAccountbyType(customer, accountTypes = [])
     puts 'Choose Account:'.ljust(@@ljustNum,'.')        + 'Choice'.rjust(@@rjustNum)
     puts '-' * @@border
     User.getUserAccountsByType(customer, accountTypes) #plural
@@ -105,13 +100,13 @@ class Menu
   end
 
   def self.printBalance(customer)
-    account = Menu.chooseAccountbyType(customer)
+    account = Menu.printAccountbyType(customer)
     puts "#{account[:accountType]}-#{account[:accountNum]}"
     puts "Your Balance is: #{User.getUserAccountBalance(account)}"
   end
 
   def self.printTransactions(customer)
-    account = Menu.chooseAccountbyType(customer)
+    account = Menu.printAccountbyType(customer)
     puts "Transactions for: #{account[:accountType]}-#{account[:accountNum]}"
     transactions = User.getUserAccountTransactions(account)
     padding = 15
@@ -123,12 +118,12 @@ class Menu
     }
   end
 
-  def self.transferFunds(customer)
+  def self.printTransferFunds(customer)
     #Note: Prof requested to be able to transfer funds between 'ANY' two accounts
     puts "\nSelect account to transfer funds from: "
-    fromAccount = Menu.chooseAccountbyType(customer)
+    fromAccount = Menu.printAccountbyType(customer)
     puts "\nSelect account to transfer funds to: "
-    toAccount = Menu.chooseAccountbyType(customer)
+    toAccount = Menu.printAccountbyType(customer)
     # dailyTransactions Limit
     if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
       puts "Declined: You have reached your daily transaction limit."
@@ -139,8 +134,8 @@ class Menu
     end
   end
 
-  def self.deposit(customer)
-    account = Menu.chooseAccountbyType(customer)
+  def self.printDeposit(customer)
+    account = Menu.printAccountbyType(customer)
     # dailyTransactions Limit
     if Feature.dailyTransactionLimit(account) == true
       puts "Declined: You have reached your daily transaction limit."
@@ -151,9 +146,9 @@ class Menu
     end
   end
 
-  def self.withdrawalCash(customer)
+  def self.printWithdrawalCash(customer)
     #only on checking or savings
-    account = Menu.chooseAccountbyType(customer, ["Checking", "Savings"])
+    account = Menu.printAccountbyType(customer, ["Checking", "Savings"])
     #max $500 withdrawal per account per day
     # dailyTransactions Limit
     if Feature.dailyTransactionLimit(account) == true
@@ -171,9 +166,9 @@ class Menu
     end
   end
 
-  def self.withdrawalCashAdvance(customer)
+  def self.printWithdrawalCashAdvance(customer)
     #only on credit card
-    account = Menu.chooseAccountbyType(customer, ["Credit Card"])
+    account = Menu.printAccountbyType(customer, ["Credit Card"])
     #max withdrawal per account per day
     #max withdrawal is credit limit
     # dailyTransactions Limit
@@ -192,13 +187,13 @@ class Menu
     end
   end
 
-  def self.payment(customer)
+  def self.printPayment(customer)
     #only from checking or savings
     puts "\nSelect account to transfer funds from: "
-    fromAccount = Menu.chooseAccountbyType(customer, ["Checking", "Savings"])
+    fromAccount = Menu.printAccountbyType(customer, ["Checking", "Savings"])
     puts "\nSelect account to transfer funds to: "
     #only to Mortgage and Car Loan
-    toAccount = Menu.chooseAccountbyType(customer, ["Mortgage", "Car Loan"])
+    toAccount = Menu.printAccountbyType(customer, ["Mortgage", "Car Loan"])
     # dailyTransactions Limit
     if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
       puts "Declined: You have reached your daily transaction limit."
@@ -213,12 +208,7 @@ class Menu
     puts "\nHello #{first_name} #{last_name}"
   end
 
-  def self.dataSave(customer)
-    Feature.getStoredDataAndSave(customer)
-    puts "Thank you for using #{appname}. \nGoodbye!\n\n"
-  end
-
-  def self.goodbye
+  def self.printGoodbye
     puts "Thank you for using #{appname}. \nGoodbye!\n\n"
   end
 end

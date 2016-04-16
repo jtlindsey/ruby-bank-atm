@@ -84,7 +84,7 @@ class User
     customer[:accounts].each {|hash| 
       choice += 1
       if accountTypes.include?(hash[:accountType])
-        Menu.listUserAccounts(hash[:accountType], hash[:accountNum], choice)
+        Menu.printUserAccounts(hash[:accountType], hash[:accountNum], choice)
       end
     }
   end
