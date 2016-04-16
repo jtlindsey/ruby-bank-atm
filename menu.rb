@@ -1,7 +1,6 @@
 require_relative 'menu'
 require_relative 'user'
 require_relative 'feature'
-require_relative 'seed'
 
 class Menu
   @@ljustNum = 40
@@ -14,7 +13,6 @@ class Menu
 
   def self.welcome
     puts "\nWelcome to #{self.appname}."
-    # customers = Seed.createCustomers
     customers = Feature.storedData
     Feature.authenticationCard(customers)
   end
