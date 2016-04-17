@@ -77,21 +77,26 @@ class User
   end
 
   def self.getUserAccountsByType(customer, accountTypes) #plural
-    choice = 0
-    User.defaultAccounts 
+    choice = 0; menuList = []; listArray = []
     accountTypes = User.defaultAccounts if accountTypes.empty?
 
     customer[:accounts].each {|hash| 
-      choice += 1
       if accountTypes.include?(hash[:accountType])
-        Menu.printUserAccounts(hash[:accountType], hash[:accountNum], choice)
+        choice += 1
+        listArray.push(hash)
+        menuList.push(Menu.printUserAccounts(hash[:accountType], hash[:accountNum], choice))
       end
     }
+    return menuList, listArray
   end
 
-  def self.getUserAccount(customer) #single
+  def self.getUserAccount(customer, choices) #single
     print 'Which account? '; accNumber = gets.chomp.to_i
-    customer[:accounts][accNumber-1]
+    if accNumber.between?(1, choices.size)
+      choices[accNumber-1]
+    else
+      false
+    end
   end
 
   def self.getUserAccountBalance(customerAccount)

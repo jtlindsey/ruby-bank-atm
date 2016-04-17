@@ -88,34 +88,43 @@ class Menu
   end
 
   def self.printUserAccounts(item1, item2, choice)
-    puts "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
+    "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
   end
 
   def self.printAccountbyType(customer, accountTypes = [])
+    choices = User.getUserAccountsByType(customer, accountTypes) #plural
     puts 'Choose Account:'.ljust(@@ljustNum,'.')        + 'Choice'.rjust(@@rjustNum)
     puts '-' * @@border
-    User.getUserAccountsByType(customer, accountTypes) #plural
+    puts choices[0]
     puts '-' * @@border
-    User.getUserAccount(customer) #single
+    User.getUserAccount(customer, choices[1]) #single
   end
 
   def self.printBalance(customer)
     account = Menu.printAccountbyType(customer)
-    puts "#{account[:accountType]}-#{account[:accountNum]}"
-    puts "Your Balance is: #{User.getUserAccountBalance(account)}"
+    if account == false
+      puts "Invalid Choice"
+    else
+      puts "#{account[:accountType]}-#{account[:accountNum]}"
+      puts "Your Balance is: #{User.getUserAccountBalance(account)}"
+    end
   end
 
   def self.printTransactions(customer)
     account = Menu.printAccountbyType(customer)
-    puts "Transactions for: #{account[:accountType]}-#{account[:accountNum]}"
-    transactions = User.getUserAccountTransactions(account)
-    padding = 15
-    transactions.each {|transaction| 
-      puts "#{transaction[:date]}".ljust(padding) + 
-            " #{transaction[:transactionType]}".ljust(padding) + 
-            " #{transaction[:amount]}".ljust(padding) +
-            " #{transaction[:comment]}".rjust(padding)
-    }
+    if account == false
+      puts "Invalid Choice"
+    else
+      puts "Transactions for: #{account[:accountType]}-#{account[:accountNum]}"
+      transactions = User.getUserAccountTransactions(account)
+      padding = 15
+      transactions.each {|transaction| 
+        puts "#{transaction[:date]}".ljust(padding) + 
+              " #{transaction[:transactionType]}".ljust(padding) + 
+              " #{transaction[:amount]}".ljust(padding) +
+              " #{transaction[:comment]}".rjust(padding)
+      }
+    end
   end
 
   def self.printTransferFunds(customer)
@@ -124,44 +133,56 @@ class Menu
     fromAccount = Menu.printAccountbyType(customer)
     puts "\nSelect account to transfer funds to: "
     toAccount = Menu.printAccountbyType(customer)
-    # dailyTransactions Limit
-    if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
-      puts "Declined: You have reached your daily transaction limit."
+    if fromAccount == false || toAccount == false
+      puts "Invalid Choice"
     else
-      print "How much? "; amount = gets.chomp.to_f
-      Feature.transfer(fromAccount, toAccount, amount)
-      puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+      # dailyTransactions Limit
+      if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
+        puts "Declined: You have reached your daily transaction limit."
+      else
+        print "How much? "; amount = gets.chomp.to_f
+        Feature.transfer(fromAccount, toAccount, amount)
+        puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+      end
     end
   end
 
   def self.printDeposit(customer)
     account = Menu.printAccountbyType(customer)
-    # dailyTransactions Limit
-    if Feature.dailyTransactionLimit(account) == true
-      puts "Declined: You have reached your daily transaction limit."
+    if account == false
+      puts "Invalid Choice"
     else
-      print "How much? "; amount = gets.chomp.to_f
-      Feature.deposit(account, amount)
-      puts "Deposited $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
+      # dailyTransactions Limit
+      if Feature.dailyTransactionLimit(account) == true
+        puts "Declined: You have reached your daily transaction limit."
+      else
+        print "How much? "; amount = gets.chomp.to_f
+        Feature.deposit(account, amount)
+        puts "Deposited $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
+      end
     end
   end
 
   def self.printWithdrawalCash(customer)
     #only on checking or savings
     account = Menu.printAccountbyType(customer, ["Checking", "Savings"])
-    #max $500 withdrawal per account per day
-    # dailyTransactions Limit
-    if Feature.dailyTransactionLimit(account) == true
-      puts "Declined: You have reached your daily transaction limit."
-    elsif Feature.dailyWithdrawalLimit(account) == true
-      puts "Declined: You have reached your daily cash withdrawal limit."
+    if account == false
+      puts "Invalid Choice"
     else
-      print "How much? "; amount = gets.chomp.to_f
-      if (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
-        puts "Declined: This transaction will take take you above your daily cash withdrawal limit."
+      #max $500 withdrawal per account per day
+      # dailyTransactions Limit
+      if Feature.dailyTransactionLimit(account) == true
+        puts "Declined: You have reached your daily transaction limit."
+      elsif Feature.dailyWithdrawalLimit(account) == true
+        puts "Declined: You have reached your daily cash withdrawal limit."
       else
-        Feature.withdrawalCash(account, amount)
-        puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+        print "How much? "; amount = gets.chomp.to_f
+        if (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
+          puts "Declined: This transaction will take take you above your daily cash withdrawal limit."
+        else
+          Feature.withdrawalCash(account, amount)
+          puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+        end
       end
     end
   end
@@ -169,20 +190,24 @@ class Menu
   def self.printWithdrawalCashAdvance(customer)
     #only on credit card
     account = Menu.printAccountbyType(customer, ["Credit Card"])
-    #max withdrawal per account per day
-    #max withdrawal is credit limit
-    # dailyTransactions Limit
-    if Feature.dailyTransactionLimit(account) == true
-      puts "Declined: You have reached your daily transaction limit."
+    if account == false
+      puts "Invalid Choice"
     else
-      print "How much? "; amount = gets.chomp.to_f
-      if (amount + User.getUserAccountBalance(account)) > account[:creditLimit]
-        puts "Declined: This transaction will take you over your credit limit."
-      elsif (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
-        puts "Declined: You have reached your daily cash withdrawal limit."
+      #max withdrawal per account per day
+      #max withdrawal is credit limit
+      # dailyTransactions Limit
+      if Feature.dailyTransactionLimit(account) == true
+        puts "Declined: You have reached your daily transaction limit."
       else
-        Feature.withdrawalCashAdvance(account, amount)
-        puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+        print "How much? "; amount = gets.chomp.to_f
+        if (amount + User.getUserAccountBalance(account)) > account[:creditLimit]
+          puts "Declined: This transaction will take you over your credit limit."
+        elsif (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
+          puts "Declined: You have reached your daily cash withdrawal limit."
+        else
+          Feature.withdrawalCashAdvance(account, amount)
+          puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+        end
       end
     end
   end
@@ -194,13 +219,17 @@ class Menu
     puts "\nSelect account to transfer funds to: "
     #only to Mortgage and Car Loan
     toAccount = Menu.printAccountbyType(customer, ["Mortgage", "Car Loan"])
-    # dailyTransactions Limit
-    if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
-      puts "Declined: You have reached your daily transaction limit."
-    else
-      print "How much? "; amount = gets.chomp.to_f
-      Feature.payment(fromAccount, toAccount, amount)
-      puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+    if fromAccount == false || toAccount == false
+      puts "Invalid Choice"
+    else    
+      # dailyTransactions Limit
+      if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
+        puts "Declined: You have reached your daily transaction limit."
+      else
+        print "How much? "; amount = gets.chomp.to_f
+        Feature.payment(fromAccount, toAccount, amount)
+        puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+      end
     end
   end
 

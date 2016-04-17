@@ -90,7 +90,6 @@ class Feature
         end
       }
     end
-    puts todaysTotal
     todaysTotal
   end
 
