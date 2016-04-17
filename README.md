@@ -12,7 +12,7 @@ ruby start.rb
 ```  
 
 ### Testing as a customer
-Follow the on-screen prompts to test. If you want to change the customers, uncomment lines 90 and 96, and then comment lines 91 and 97 the in menu.rb file. Save and start the app and use one of the following 3 default customers:
+Follow the on-screen prompts to test. If you want to change the customers, uncomment lines 90 and 96, and then comment lines 91 and 97 in the menu.rb file. Save and start the app and use one of the following 3 default customers:
 
 **Ken Doe**  
 ATM Card:  
