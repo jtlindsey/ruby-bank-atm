@@ -12,7 +12,7 @@ ruby start.rb
 ```  
 
 ### Testing as a customer
-Follow the on-screen prompts to test. If you want to change the customers, uncomment lines 90 and 96, and then comment lines 91 and 97 in the menu.rb file. Save and start the app and use one of the following 3 default customers:
+Follow the on-screen prompts to test. There is one customer hard-coded in. Default data for the customers can be found in the mydata.json file. If you want to change the customer being used for testing, uncomment lines 90 and 96, and then comment lines 91 and 97 in the menu.rb file. Save and start the app and use one of the following 3 default customers:
 
 **Ken Doe**  
 ATM Card:  
@@ -32,7 +32,7 @@ ATM Card:
 Pin:   
 1174  
 
-Default data for the customers can be found in the mydata.json file.
+If this was being done for a real bank, no code would be written before getting exact authentication specifications and database API details from the bank, and ATM regulations from the FDIC. A test suite (TDD) would be built to easily test all parts of the code were still working properly when something was changed and exact features requested were included. Penetration testing would be performed against the program running on a test ATM machine connected to the real database.  
 
 ### Notes
 Entering in the wrong ATM Card key once will exit program.  
