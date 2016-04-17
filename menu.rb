@@ -152,9 +152,13 @@ class Menu
       if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        print "How much? "; amount = gets.chomp.to_f
-        Feature.transfer(fromAccount, toAccount, amount)
-        puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+        amount = Menu.printValidateAmount
+        if amount == false
+          puts "Invalid Entry"
+        else
+          Feature.transfer(fromAccount, toAccount, amount)
+          puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+        end
       end
     end
   end
@@ -168,9 +172,13 @@ class Menu
       if Feature.dailyTransactionLimit(account) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        print "How much? "; amount = gets.chomp.to_f
-        Feature.deposit(account, amount)
-        puts "Deposited $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
+        amount = Menu.printValidateAmount
+        if amount == false
+          puts "Invalid Entry"
+        else
+          Feature.deposit(account, amount)
+          puts "Deposited $#{amount} to: #{account[:accountType]}-#{account[:accountNum]} "
+        end
       end
     end
   end
@@ -188,12 +196,16 @@ class Menu
       elsif Feature.dailyWithdrawalLimit(account) == true
         puts "Declined: You have reached your daily cash withdrawal limit."
       else
-        print "How much? "; amount = gets.chomp.to_f
-        if (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
-          puts "Declined: This transaction will take take you above your daily cash withdrawal limit."
+        amount = Menu.printValidateAmount
+        if amount == false
+          puts "Invalid Entry"
         else
-          Feature.withdrawalCash(account, amount)
-          puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+          if (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
+            puts "Declined: This transaction will take take you above your daily cash withdrawal limit."
+          else
+            Feature.withdrawalCash(account, amount)
+            puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+          end
         end
       end
     end
@@ -211,14 +223,18 @@ class Menu
       if Feature.dailyTransactionLimit(account) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        print "How much? "; amount = gets.chomp.to_f
-        if (amount + User.getUserAccountBalance(account)) > account[:creditLimit]
-          puts "Declined: This transaction will take you over your credit limit."
-        elsif (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
-          puts "Declined: You have reached your daily cash withdrawal limit."
+        amount = Menu.printValidateAmount
+        if amount == false
+          puts "Invalid Entry"
         else
-          Feature.withdrawalCashAdvance(account, amount)
-          puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+          if (amount + User.getUserAccountBalance(account)) > account[:creditLimit]
+            puts "Declined: This transaction will take you over your credit limit."
+          elsif (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
+            puts "Declined: You have reached your daily cash withdrawal limit."
+          else
+            Feature.withdrawalCashAdvance(account, amount)
+            puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+          end
         end
       end
     end
@@ -238,11 +254,20 @@ class Menu
       if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        print "How much? "; amount = gets.chomp.to_f
-        Feature.payment(fromAccount, toAccount, amount)
-        puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+        amount = Menu.printValidateAmount
+        if amount == false
+          puts "Invalid Entry"
+        else
+          Feature.payment(fromAccount, toAccount, amount)
+          puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+        end
       end
     end
+  end
+
+  def self.printValidateAmount
+    print "How much? "; amount = gets.chomp
+    amount = Float amount rescue false
   end
 
   def self.printGreeting(first_name, last_name)
