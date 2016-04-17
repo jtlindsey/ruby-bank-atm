@@ -21,7 +21,6 @@ class Menu
     [
       "Instructions",
       "Print Balance",
-      "Print Transactions",
       "Transfer Funds",
       "Deposit",
       "Cash Withdrawal",
@@ -63,8 +62,6 @@ class Menu
       when "#{i+=1}".to_s then Menu.printInstructions
       when "#{i+=1}".to_s #print balance
         Menu.printBalance(customer)
-      when "#{i+=1}".to_s #print transactions
-        Menu.printTransactions(customer)
       when "#{i+=1}".to_s #transfer funds
         Menu.printTransferFunds(customer)
       when "#{i+=1}".to_s #deposit
@@ -120,23 +117,6 @@ class Menu
       puts "#{account[:accountType]}-#{account[:accountNum]}"
       account[:creditLimit] > 0 ? creditLimit = account[:creditLimit] : creditLimit = "N/A"
       puts "Your Balance is: $#{User.getUserAccountBalance(account)} Credit Limit: #{creditLimit}"
-    end
-  end
-
-  def self.printTransactions(customer)
-    account = Menu.printAccountbyType(customer)
-    if account == false
-      puts "Invalid Choice"
-    else
-      puts "Transactions for: #{account[:accountType]}-#{account[:accountNum]}"
-      transactions = User.getUserAccountTransactions(account)
-      padding = 15
-      transactions.each {|transaction| 
-        puts "#{transaction[:date]}".ljust(padding) + 
-              " #{transaction[:transactionType]}".ljust(padding) + 
-              " #{transaction[:amount]}".ljust(padding) +
-              " #{transaction[:comment]}".rjust(padding)
-      }
     end
   end
 

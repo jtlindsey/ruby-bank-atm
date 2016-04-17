@@ -102,8 +102,4 @@ class User
     customerAccount[:transactions].inject(0) { |balance, transaction|  balance += transaction[:amount]}    
   end
 
-  def self.getUserAccountTransactions(customerAccount)
-    customerAccount[:transactions]
-  end
-
 end
