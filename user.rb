@@ -89,7 +89,7 @@ class User
     return menuList, listArray
   end
 
-  def self.getUserAccount(customer, choices) #single
+  def self.getUserAccount(choices) #single
     print 'Which account? '; accNumber = gets.chomp.to_i
     if accNumber.between?(1, choices.size)
       choices[accNumber-1]

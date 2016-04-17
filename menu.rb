@@ -97,7 +97,7 @@ class Menu
     puts '-' * @@border
     puts choices[0]
     puts '-' * @@border
-    User.getUserAccount(customer, choices[1]) #single
+    User.getUserAccount(choices[1]) #single
   end
 
   def self.printBalance(customer)
