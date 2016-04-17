@@ -72,7 +72,6 @@ class User
   end
 
   def self.findUser(customers, userId)
-    # customers.select {|customer| customer[:userId] == userId }
     customers.find {|customer| customer[:userId] == userId}
   end
 
