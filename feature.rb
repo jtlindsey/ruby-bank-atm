@@ -101,7 +101,6 @@ class Feature
 
   def self.deposit(account, amount)
     amount = (amount * -1) if User.liabilityAccounts.include?(account[:accountType])
-
     account[:transactions].push(
       User.newTransaction(
         account[:userId], 
@@ -196,6 +195,4 @@ class Feature
     puts "Session successfully saved."
   end
 
-# change all ids on transactions to indexed value incremented on unique identifier
-# Time.now.to_i
 end
