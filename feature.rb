@@ -90,6 +90,15 @@ class Feature
     todaysTotal
   end
 
+  def self.printValidateAvalibleFunds(fromAccount, amount)
+    accBalance = User.getUserAccountBalance(fromAccount)
+    if User.liabilityAccounts.include?(fromAccount[:accountType])
+      ((fromAccount[:creditLimit] - accBalance) - amount) >= 0
+    else
+      (accBalance - amount) >= 0
+    end
+  end
+
   def self.deposit(account, amount)
     amount = (amount * -1) if User.liabilityAccounts.include?(account[:accountType])
 

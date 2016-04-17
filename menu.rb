@@ -153,11 +153,11 @@ class Menu
       if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        amount = Menu.printValidateAmount
+        amount = Menu.printGetAmount
         if amount == false
           puts "Invalid Entry"
         else
-          if Menu.printValidateAvalibleFunds(fromAccount, amount) == false
+          if Feature.printValidateAvalibleFunds(fromAccount, amount) == false
             puts "Insufficient funds"
           else
             Feature.transfer(fromAccount, toAccount, amount)
@@ -177,7 +177,7 @@ class Menu
       if Feature.dailyTransactionLimit(account) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        amount = Menu.printValidateAmount
+        amount = Menu.printGetAmount
         if amount == false
           puts "Invalid Entry"
         else
@@ -201,14 +201,14 @@ class Menu
       elsif Feature.dailyWithdrawalLimit(account) == true
         puts "Declined: You have reached your daily cash withdrawal limit."
       else
-        amount = Menu.printValidateAmount
+        amount = Menu.printGetAmount
         if amount == false
           puts "Invalid Entry"
         else
           if (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
             puts "Declined: This transaction will take take you above your daily cash withdrawal limit."
           else
-            if Menu.printValidateAvalibleFunds(account, amount) == false
+            if Feature.printValidateAvalibleFunds(account, amount) == false
               puts "Insufficient funds"
             else
               Feature.withdrawalCash(account, amount)
@@ -232,7 +232,7 @@ class Menu
       if Feature.dailyTransactionLimit(account) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        amount = Menu.printValidateAmount
+        amount = Menu.printGetAmount
         if amount == false
           puts "Invalid Entry"
         else
@@ -263,11 +263,11 @@ class Menu
       if Feature.dailyTransactionLimit(toAccount) == true || Feature.dailyTransactionLimit(fromAccount) == true
         puts "Declined: You have reached your daily transaction limit."
       else
-        amount = Menu.printValidateAmount
+        amount = Menu.printGetAmount
         if amount == false
           puts "Invalid Entry"
         else
-          if Menu.printValidateAvalibleFunds(fromAccount, amount) == false
+          if Feature.printValidateAvalibleFunds(fromAccount, amount) == false
             puts "Insufficient funds"
           else
             Feature.payment(fromAccount, toAccount, amount)
@@ -278,18 +278,9 @@ class Menu
     end
   end
 
-  def self.printValidateAmount
+  def self.printGetAmount
     print "How much? "; amount = gets.chomp
     amount = Float amount rescue false
-  end
-
-  def self.printValidateAvalibleFunds(fromAccount, amount)
-    accBalance = User.getUserAccountBalance(fromAccount)
-    if User.liabilityAccounts.include?(fromAccount[:accountType])
-      ((fromAccount[:creditLimit] - accBalance) - amount) >= 0
-    else
-      (accBalance - amount) >= 0
-    end
   end
 
   def self.printGetAccountChoice
