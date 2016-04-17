@@ -51,7 +51,8 @@ class Menu
     puts '-' * @@border
   end
 
-  def printMainLoop(customer)
+  def printMainLoop(customer, atmPinCheck)
+    atmPinCheck == false unless atmPinCheck == true
     user_choice = ''
     loop do user_choice != 'x'
       i = 0
@@ -61,17 +62,17 @@ class Menu
       case user_choice
       when "#{i+=1}".to_s then Menu.printInstructions
       when "#{i+=1}".to_s #print balance
-        Menu.printBalance(customer)
+        Menu.printBalance(customer)                 if atmPinCheck == true
       when "#{i+=1}".to_s #transfer funds
-        Menu.printTransferFunds(customer)
+        Menu.printTransferFunds(customer)           if atmPinCheck == true
       when "#{i+=1}".to_s #deposit
-        Menu.printDeposit(customer)
+        Menu.printDeposit(customer)                 if atmPinCheck == true
       when "#{i+=1}".to_s #cash withdrawal
-        Menu.printWithdrawalCash(customer)
+        Menu.printWithdrawalCash(customer)          if atmPinCheck == true
       when "#{i+=1}".to_s #cash advance
-        Menu.printWithdrawalCashAdvance(customer)
+        Menu.printWithdrawalCashAdvance(customer)   if atmPinCheck == true
       when "#{i+=1}".to_s #payment
-        Menu.printPayment(customer)
+        Menu.printPayment(customer)                 if atmPinCheck == true
       when 'x' #save data and exit
         Feature.getStoredDataAndSave(customer)
         Menu.printGoodbye

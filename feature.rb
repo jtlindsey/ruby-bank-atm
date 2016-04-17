@@ -35,7 +35,8 @@ class Feature
   def self.loggedIn(customer)
     Menu.printGreeting(customer[:firstName], customer[:lastName])
     Menu.printInstructions
-    Menu.new.printMainLoop(customer)
+    atmPinCheck = true
+    Menu.new.printMainLoop(customer, atmPinCheck)
   end
 
   def newTransaction(customer)
