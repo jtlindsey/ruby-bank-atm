@@ -3,9 +3,7 @@ require 'json'
 
 class Feature
   def self.authenticationCard(customers)
-    # puts "Please enter your ATM card."; atmCardId = gets.chomp
-    puts "Please enter your ATM card:"; atmCardId = "80e711df-8c8d-4d1b-871e-7e1528675d11"
-
+    atmCardId = Menu.printATMcardAuthentication
     userWithCard = User.findUserByCard(customers, atmCardId)
     case userWithCard
     when false then puts "That card is not accepted at this ATM.\nGoodbye!"
@@ -18,8 +16,7 @@ class Feature
     x = 0
     access = false
     while x < 3
-      # puts 'Enter your pin:'; pinEntry = gets.chomp
-      puts 'Enter your pin:'; pinEntry = "1174"
+      pinEntry = Menu.printATMcardPinAuthentication
       x += 1
       case 
       when pinEntry == userWithCard[:atmPin]

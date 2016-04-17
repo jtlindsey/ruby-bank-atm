@@ -87,6 +87,18 @@ class Menu
     end      
   end
 
+  def self.printATMcardAuthentication
+    puts "Please enter your ATM card."
+    # atmCardId = gets.chomp
+    atmCardId = "80e711df-8c8d-4d1b-871e-7e1528675d11"
+  end
+
+  def self.printATMcardPinAuthentication
+    puts 'Enter your pin:'
+    # pinEntry = gets.chomp
+    pinEntry = "1174"
+  end
+
   def self.printUserAccounts(item1, item2, choice)
     "#{item1}-#{item2}".ljust(@@ljustNum,'.') + "#{choice}".rjust(@@rjustNum)
   end
