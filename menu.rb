@@ -13,7 +13,7 @@ class Menu
 
   def self.welcome
     puts "\nWelcome to #{self.appname}."
-    customers = Feature.storedData
+    customers = User.storedData
     Feature.authenticationCard(customers)
   end
 
@@ -74,7 +74,7 @@ class Menu
       when "#{i+=1}".to_s #payment
         Menu.printPayment(customer)                 if atmPinCheck == true
       when 'x' #save data and exit
-        Feature.getStoredDataAndSave(customer)
+        User.getStoredDataAndSave(customer)
         Menu.printGoodbye
       else
         puts 'Invalid Choice.'
