@@ -118,7 +118,8 @@ class Menu
       puts "Invalid Choice"
     else
       puts "#{account[:accountType]}-#{account[:accountNum]}"
-      puts "Your Balance is: #{User.getUserAccountBalance(account)}"
+      account[:creditLimit] > 0 ? creditLimit = account[:creditLimit] : creditLimit = "N/A"
+      puts "Your Balance is: $#{User.getUserAccountBalance(account)} Credit Limit: #{creditLimit}"
     end
   end
 
@@ -156,8 +157,12 @@ class Menu
         if amount == false
           puts "Invalid Entry"
         else
-          Feature.transfer(fromAccount, toAccount, amount)
-          puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+          if Menu.printValidateAvalibleFunds(fromAccount, amount) == false
+            puts "Insufficient funds"
+          else
+            Feature.transfer(fromAccount, toAccount, amount)
+            puts "Transfered $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+          end
         end
       end
     end
@@ -203,8 +208,12 @@ class Menu
           if (amount + Feature.totalWithdrawalsToday(account)) > Feature.dailyWithdrawalLimitAmount
             puts "Declined: This transaction will take take you above your daily cash withdrawal limit."
           else
-            Feature.withdrawalCash(account, amount)
-            puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+            if Menu.printValidateAvalibleFunds(account, amount) == false
+              puts "Insufficient funds"
+            else
+              Feature.withdrawalCash(account, amount)
+              puts "Withdrew $#{amount} from: #{account[:accountType]}-#{account[:accountNum]} "
+            end
           end
         end
       end
@@ -258,8 +267,12 @@ class Menu
         if amount == false
           puts "Invalid Entry"
         else
-          Feature.payment(fromAccount, toAccount, amount)
-          puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+          if Menu.printValidateAvalibleFunds(fromAccount, amount) == false
+            puts "Insufficient funds"
+          else
+            Feature.payment(fromAccount, toAccount, amount)
+            puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
+          end
         end
       end
     end
@@ -268,6 +281,15 @@ class Menu
   def self.printValidateAmount
     print "How much? "; amount = gets.chomp
     amount = Float amount rescue false
+  end
+
+  def self.printValidateAvalibleFunds(fromAccount, amount)
+    accBalance = User.getUserAccountBalance(fromAccount)
+    if User.liabilityAccounts.include?(fromAccount[:accountType])
+      ((fromAccount[:creditLimit] - accBalance) - amount) >= 0
+    else
+      (accBalance - amount) >= 0
+    end
   end
 
   def self.printGreeting(first_name, last_name)
