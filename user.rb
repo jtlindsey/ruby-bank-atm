@@ -90,7 +90,7 @@ class User
   end
 
   def self.getUserAccount(choices) #single
-    print 'Which account? '; accNumber = gets.chomp.to_i
+    accNumber = Menu.printGetAccountChoice
     if accNumber.between?(1, choices.size)
       choices[accNumber-1]
     else

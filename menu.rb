@@ -292,6 +292,11 @@ class Menu
     end
   end
 
+  def self.printGetAccountChoice
+    print 'Which account? '
+    gets.chomp.to_i
+  end
+
   def self.printGreeting(first_name, last_name)
     puts "\nHello #{first_name} #{last_name}"
   end
