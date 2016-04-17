@@ -147,7 +147,7 @@ class Feature
     amount = (amount * -1) if User.liabilityAccounts.include?(toAccount[:accountType])
 
     toAccount[:transactions].push(
-      User.newTransferTransaction(
+      User.newTransaction(
         toAccount[:userId], 
         toAccount[:accountNum], 
         "Deposit", 
@@ -160,7 +160,7 @@ class Feature
     amount = (amount * -1) if User.liabilityAccounts.include?(fromAccount[:accountType])
 
     fromAccount[:transactions].push(
-      User.newTransferTransaction(
+      User.newTransaction(
         fromAccount[:userId], 
         fromAccount[:accountNum], 
         "Withdrawal", 

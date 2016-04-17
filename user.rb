@@ -22,17 +22,6 @@ class User
     }
   end
 
-  def self.newTransferTransaction(userId, accountNum, transactionType, amount, comment="")
-    {
-      userId: userId,
-      accountNum: accountNum,
-      date: Date.today.to_s,
-      transactionType: transactionType,
-      amount: amount,
-      comment: comment
-    }
-  end
-
   def self.newTransaction(userId, accountNum, transactionType, amount, comment="")
     {
       userId: userId,
