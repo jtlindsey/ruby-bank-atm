@@ -12,7 +12,7 @@ ruby start.rb
 ```  
 
 ### Testing as a customer
-Follow the on-screen prompts to test. If you want to change the customers, look at the seed.rb file with customers and accounts. Here are the 3 default customers:
+Follow the on-screen prompts to test. If you want to change the customers, uncomment lines 90 and 96, and then comment lines 91 and 97 the in menu.rb file. Save and start the app and use one of the following 3 default customers:
 
 **Ken Doe**  
 ATM Card:  
@@ -32,14 +32,10 @@ ATM Card:
 Pin:   
 1174  
 
+Default data for the customers can be found in the mydata.json file.
 
 ### Notes
-Data is now saved on your local machine in the project data directory when you exit.  
-Some prompts may be commented out and replaced with hard code while in progress.  
 Entering in the wrong ATM Card key once will exit program.  
 Entering in the wrong Pin 3 times will exit program.  
 
-Error handling for many features have not been requested or added including:  
-
-- Checking available funds when making payment from account  
-- Unacceptable key entry not relevant to presented menu list item
+You can checkout the different branches to view alternative versions of this app.
