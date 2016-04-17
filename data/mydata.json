@@ -38,7 +38,7 @@
         "transactions": [
 
         ],
-        "creditLimit": 0
+        "creditLimit": 15000
       },
       {
         "userId": 1,
@@ -47,7 +47,7 @@
         "transactions": [
 
         ],
-        "creditLimit": 0
+        "creditLimit": 430000
       },
       {
         "userId": 1,
@@ -56,7 +56,7 @@
         "transactions": [
 
         ],
-        "creditLimit": 0
+        "creditLimit": 50000
       },
       {
         "userId": 1,
@@ -65,7 +65,7 @@
         "transactions": [
 
         ],
-        "creditLimit": 0
+        "creditLimit": 30000
       },
       {
         "userId": 1,
@@ -74,7 +74,7 @@
         "transactions": [
 
         ],
-        "creditLimit": 0
+        "creditLimit": 20000
       }
     ]
   },
@@ -177,7 +177,7 @@
             "comment": "oldHouse"
           }
         ],
-        "creditLimit": 0
+        "creditLimit": 80000
       },
       {
         "userId": 3,
@@ -193,7 +193,7 @@
             "comment": "newCar"
           }
         ],
-        "creditLimit": 0
+        "creditLimit": 10000
       },
       {
         "userId": 3,
@@ -202,7 +202,7 @@
         "transactions": [
 
         ],
-        "creditLimit": 0
+        "creditLimit": 15000
       },
       {
         "userId": 3,
