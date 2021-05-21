@@ -12,20 +12,20 @@ class Casset
 
   def self.storedData
     # Get ALL user data
-    pathtofile = User.storedDataFileLocation
+    pathtofile = Casset.storedDataFileLocation
     # Parse data, 'symbolize_names: true' to convert json string keys to symbols
     JSON.parse(IO.read(pathtofile), symbolize_names: true)
   end
 
   def self.getStoredDataAndSave(userSession)
-    existingData = User.storedData
+    existingData = Casset.storedData
     # Find the data for the current user "userId = userSession[:userId]" in the...
     # existingData object and replace it with the data from this session(userSession)
     userId = userSession[:userId]
     existingData.find { |customer| customer[:userId] == userId }.replace(userSession)
 
     # Save data as JSON with indentation (pretty_generate)
-    File.open(User.storedDataFileLocation, 'w') do |f|
+    File.open(Casset.storedDataFileLocation, 'w') do |f|
       f.write(JSON.pretty_generate(existingData))
     end
     puts 'Session successfully saved.'
