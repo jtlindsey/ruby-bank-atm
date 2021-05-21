@@ -2,7 +2,6 @@ require 'date'
 require 'json'
 
 class User
-
   def self.newUser(userId, firstName, lastName, atmPin, atmCardId)
     {
       userId: userId,
@@ -24,7 +23,7 @@ class User
     }
   end
 
-  def self.newTransaction(userId, accountNum, transactionType, amount, comment="")
+  def self.newTransaction(userId, accountNum, transactionType, amount, comment = '')
     {
       userId: userId,
       accountNum: accountNum,
@@ -37,65 +36,67 @@ class User
 
   def self.defaultAccounts
     [
-      "Checking", 
-      "Savings", 
-      "Loan", 
-      "Mortgage", 
-      "Car Loan", 
-      "Boat Loan", 
-      "Credit Card"
+      'Checking',
+      'Savings',
+      'Loan',
+      'Mortgage',
+      'Car Loan',
+      'Boat Loan',
+      'Credit Card'
     ]
   end
 
   def self.liabilityAccounts
     [
-      "Loan", 
-      "Mortgage", 
-      "Car Loan", 
-      "Boat Loan", 
-      "Credit Card"
+      'Loan',
+      'Mortgage',
+      'Car Loan',
+      'Boat Loan',
+      'Credit Card'
     ]
   end
 
   def self.findUserByCard(customers, atmCardId)
-    lookup = customers.find {|customer| customer[:atmCardId] == atmCardId}
-    (lookup != nil) ? lookup : false
+    lookup = customers.find { |customer| customer[:atmCardId] == atmCardId }
+    !lookup.nil? ? lookup : false
   end
 
   def self.findUser(customers, userId)
-    customers.find {|customer| customer[:userId] == userId}
+    customers.find { |customer| customer[:userId] == userId }
   end
 
-  def self.getUserAccountsByType(customer, accountTypes) #plural
+  # plural
+  def self.getUserAccountsByType(customer, accountTypes)
     choice = 0; menuList = []; listArray = []
     accountTypes = User.defaultAccounts if accountTypes.empty?
 
-    customer[:accounts].each {|hash| 
-      if accountTypes.include?(hash[:accountType])
-        choice += 1
-        listArray.push(hash)
-        menuList.push(Menu.printUserAccounts(hash[:accountType], hash[:accountNum], choice))
-      end
-    }
-    return menuList, listArray
+    customer[:accounts].each do |hash|
+      next unless accountTypes.include?(hash[:accountType])
+
+      choice += 1
+      listArray.push(hash)
+      menuList.push(Menu.printUserAccounts(hash[:accountType], hash[:accountNum], choice))
+    end
+    [menuList, listArray]
   end
 
-  def self.getUserAccount(choices) #single
+  # single
+  def self.getUserAccount(choices)
     accNumber = Menu.printGetAccountChoice
     if accNumber.between?(1, choices.size)
-      choices[accNumber-1]
+      choices[accNumber - 1]
     else
       false
     end
   end
 
   def self.getUserAccountBalance(customerAccount)
-    customerAccount[:transactions].inject(0) { |balance, transaction|  balance += transaction[:amount]}    
+    customerAccount[:transactions].inject(0) { |balance, transaction| balance += transaction[:amount] }
   end
 
   def self.storedDataFileLocation
     # Get JSON database file location
-    pathtofile = File.join(File.dirname(__FILE__), "/data/mydata.json")
+    pathtofile = File.join(File.dirname(__FILE__), '/data/usersData.json')
   end
 
   def self.storedData
@@ -107,16 +108,15 @@ class User
 
   def self.getStoredDataAndSave(userSession)
     existingData = User.storedData
-    # Find the data for the current user "userId = userSession[:userId]" in the... 
+    # Find the data for the current user "userId = userSession[:userId]" in the...
     # existingData object and replace it with the data from this session(userSession)
     userId = userSession[:userId]
-    existingData.find {|customer| customer[:userId] == userId}.replace(userSession)
+    existingData.find { |customer| customer[:userId] == userId }.replace(userSession)
 
     # Save data as JSON with indentation (pretty_generate)
-    File.open(User.storedDataFileLocation,"w") do |f|
+    File.open(User.storedDataFileLocation, 'w') do |f|
       f.write(JSON.pretty_generate(existingData))
     end
-    puts "Session successfully saved."
+    puts 'Session successfully saved.'
   end
-
 end

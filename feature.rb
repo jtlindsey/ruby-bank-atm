@@ -7,7 +7,7 @@ class Feature
     case userWithCard
     when false then puts "That card is not accepted at this ATM.\nGoodbye!"
     else
-      self.authenticationUser(userWithCard)
+      authenticationUser(userWithCard)
     end
   end
 
@@ -17,18 +17,17 @@ class Feature
     while x < 3
       pinEntry = Menu.printATMcardPinAuthentication
       x += 1
-      case 
-      when pinEntry == userWithCard[:atmPin]
+      if pinEntry == userWithCard[:atmPin]
         access = true
-        puts "success"
+        puts 'success'
         break
-      when pinEntry != userWithCard[:atmPin] && x <3
+      elsif pinEntry != userWithCard[:atmPin] && x < 3
         puts "Invalid Pin (#{x}). Try again."
-      when x == 3
+      elsif x == 3
         puts "Invalid Pin (#{x}). Goodbye."
       end
     end
-    puts self.loggedIn(userWithCard) if access == true
+    puts loggedIn(userWithCard) if access == true
   end
 
   def self.loggedIn(customer)
@@ -38,13 +37,13 @@ class Feature
     Menu.new.printMainLoop(customer, atmPinCheck)
   end
 
-  def newTransaction(customer)
-    #max trans per account per day 10 handled at menu request
+  def newTransaction(_customer)
+    # max trans per account per day 10 handled at menu request
     transacton = {
-    accountnum: 0,
-    transactionid: 0,
-    transactiontype: "deposit withddrawal payment transfer",
-    tranactiondate: datetime
+      accountnum: 0,
+      transactionid: 0,
+      transactiontype: 'deposit withddrawal payment transfer',
+      tranactiondate: datetime
     }
   end
 
@@ -59,33 +58,29 @@ class Feature
   def self.dailyTransactionLimit(account)
     limit = Feature.dailyTransactionLimitAmount
     todaysTransactions = 0
-    account[:transactions].each {|transaction|
-      todaysTransactions +=1 if transaction[:date] == Date.today.to_s
-    }
-    todaysTransactions >= limit ? true : false
+    account[:transactions].each do |transaction|
+      todaysTransactions += 1 if transaction[:date] == Date.today.to_s
+    end
+    todaysTransactions >= limit
   end
 
   def self.dailyWithdrawalLimit(account)
     limit = Feature.dailyWithdrawalLimitAmount
     todaysTotal = Feature.totalWithdrawalsToday(account)
-    todaysTotal >= limit ? true : false
+    todaysTotal >= limit
   end
 
   def self.totalWithdrawalsToday(account)
     todaysTotal = 0
     if User.liabilityAccounts.include?(account[:accountType])
-      #use if withdrawal limit applies to all accounts (including liabilities)
-      account[:transactions].each {|transaction|
-        if transaction[:date] == Date.today.to_s && transaction[:amount] > 0
-          todaysTotal += (transaction[:amount]) 
-        end
-      }
+      # use if withdrawal limit applies to all accounts (including liabilities)
+      account[:transactions].each do |transaction|
+        todaysTotal += (transaction[:amount]) if transaction[:date] == Date.today.to_s && transaction[:amount] > 0
+      end
     else
-      account[:transactions].each {|transaction|
-        if transaction[:date] == Date.today.to_s && transaction[:amount] < 0
-          todaysTotal += (transaction[:amount] * -1) 
-        end
-      }
+      account[:transactions].each do |transaction|
+        todaysTotal += (transaction[:amount] * -1) if transaction[:date] == Date.today.to_s && transaction[:amount] < 0
+      end
     end
     todaysTotal
   end
@@ -103,42 +98,45 @@ class Feature
     amount = (amount * -1) if User.liabilityAccounts.include?(account[:accountType])
     account[:transactions].push(
       User.newTransaction(
-        account[:userId], 
-        account[:accountNum], 
-        "Deposit", 
-        amount)
+        account[:userId],
+        account[:accountNum],
+        'Deposit',
+        amount
       )
+    )
   end
 
   def self.withdrawalCash(account, amount)
-  #only on checking or savings
-  #max $500 withdrawal per account per day
+    # only on checking or savings
+    # max $500 withdrawal per account per day
     account[:transactions].push(
       User.newTransaction(
-        account[:userId], 
-        account[:accountNum], 
-        "Withdrawal Cash", 
-        (-1 * amount))
+        account[:userId],
+        account[:accountNum],
+        'Withdrawal Cash',
+        (-1 * amount)
       )
+    )
   end
 
   def self.withdrawalCashAdvance(account, amount)
     account[:transactions].push(
       User.newTransaction(
-        account[:userId], 
-        account[:accountNum], 
-        "Withdrawal Cash Advance", 
-        amount)
+        account[:userId],
+        account[:accountNum],
+        'Withdrawal Cash Advance',
+        amount
       )
+    )
   end
 
   def self.payment(fromAccount, toAccount, amount)
     Feature.withdrawalTransfer(fromAccount, amount, toAccount)
-    Feature.depositTransfer(toAccount, (amount), fromAccount)
+    Feature.depositTransfer(toAccount, amount, fromAccount)
   end
 
   def self.transfer(fromAccount, toAccount, amount)
-    #Note: Prof requested to be able to transfer funds between 'ANY' two accounts
+    # NOTE: Prof requested to be able to transfer funds between 'ANY' two accounts
     Feature.withdrawalTransfer(fromAccount, amount, toAccount)
     Feature.depositTransfer(toAccount, amount, fromAccount)
   end
@@ -148,12 +146,13 @@ class Feature
 
     toAccount[:transactions].push(
       User.newTransaction(
-        toAccount[:userId], 
-        toAccount[:accountNum], 
-        "Deposit", 
-        amount, 
-        "From: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]}")
+        toAccount[:userId],
+        toAccount[:accountNum],
+        'Deposit',
+        amount,
+        "From: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]}"
       )
+    )
   end
 
   def self.withdrawalTransfer(fromAccount, amount, toAccount)
@@ -161,12 +160,12 @@ class Feature
 
     fromAccount[:transactions].push(
       User.newTransaction(
-        fromAccount[:userId], 
-        fromAccount[:accountNum], 
-        "Withdrawal", 
-        (-1 * amount), 
-        "To: #{toAccount[:accountType]}-#{toAccount[:accountNum]}")
+        fromAccount[:userId],
+        fromAccount[:accountNum],
+        'Withdrawal',
+        (-1 * amount),
+        "To: #{toAccount[:accountType]}-#{toAccount[:accountNum]}"
       )
+    )
   end
-
 end
