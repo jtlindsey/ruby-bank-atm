@@ -48,11 +48,11 @@ class Feature
   end
 
   def self.dailyTransactionLimitAmount
-    10
+    1000
   end
 
   def self.dailyWithdrawalLimitAmount
-    500
+    5000
   end
 
   def self.dailyTransactionLimit(account)

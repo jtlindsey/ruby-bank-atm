@@ -235,13 +235,10 @@ class Menu
         puts 'Invalid Entry'
       elsif Feature.printValidateAvalibleFunds(fromAccount, amount) == false
         puts 'Insufficient funds'
-          if Feature.printValidateAvalibleFunds(fromAccount, amount) == false
-            puts "Insufficient funds"
-          else
-            Feature.payment(fromAccount, toAccount, amount)
-            puts "Payment of $#{amount} from: #{fromAccount[:accountType]}-#{fromAccount[:accountNum]} to: #{toAccount[:accountType]}-#{toAccount[:accountNum]} "
-          end
-        end
+      else
+        withdrawal = Casset.withdrawalCashPrepare(amount)
+        Feature.payment(fromAccount, toAccount, amount)
+        Casset.withdrawalCashExecute(withdrawal)
       end
     end
   end
